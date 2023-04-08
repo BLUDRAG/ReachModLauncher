@@ -13,6 +13,7 @@ namespace ReachModLauncher
         public TMP_Text        Text;
         public GameObject      Progress;
         public Transform       ProgressBar;
+        public VersionDropdown VersionDropdown;
 
         public void OnClick()
         {
@@ -22,6 +23,7 @@ namespace ReachModLauncher
             {
                 DeleteMod(installedMod);
                 Text.text = "Download";
+                VersionDropdown.IsUpdateAvailable();
 
                 return;
             }
@@ -89,6 +91,7 @@ namespace ReachModLauncher
             }
 
             DataManagement.SaveData();
+            VersionDropdown.IsUpdateAvailable();
         }
     }
 }

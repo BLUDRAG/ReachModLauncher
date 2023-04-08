@@ -133,6 +133,8 @@ namespace ReachModLauncher
 				                                     Name    = mod.Name,
 				                                     Version = (entry.VersionDropdown.Versions[modIndex]).Version,
 			                                     };
+
+			entry.VersionDropdown.IsUpdateAvailable();
 		}
 	}
 }
