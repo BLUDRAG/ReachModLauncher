@@ -6845,7 +6845,7 @@ MonoBehaviour:
       m_Image: {fileID: 21300000, guid: 314bc38ca6b04654cb4297a2d2a01e9a, type: 3}
     - m_Text: POI Downloads
       m_Image: {fileID: 21300000, guid: cde08ccb98b6d9a4b9878242f93918ad, type: 3}
-    - m_Text: My Mod Packs
+    - m_Text: My  Mod Packs
       m_Image: {fileID: 21300000, guid: edfde3ea458bfdb4a96d410bb143a851, type: 3}
   m_OnValueChanged:
     m_PersistentCalls:
