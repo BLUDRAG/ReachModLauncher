@@ -27,6 +27,7 @@ namespace ReachModLauncher
 		{
 			string modList = Encoding.ASCII.GetString(await DownloadFile(_modListLink));
 			_mods = JsonConvert.DeserializeObject<List<ReachGamingMod>>(modList);
+			_mods.Sort((first, second) => string.Compare(first.Name, second.Name, StringComparison.Ordinal));
 
 			foreach(ReachGamingMod mod in _mods)
 			{
