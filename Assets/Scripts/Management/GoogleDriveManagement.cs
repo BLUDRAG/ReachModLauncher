@@ -3,6 +3,7 @@ using System.IO;
 using System.Threading.Tasks;
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Drive.v3;
+using Google.Apis.Upload;
 using UnityEngine;
 using File = Google.Apis.Drive.v3.Data.File;
 
@@ -72,19 +73,18 @@ namespace ReachModLauncher
         	return files;
         }
         
-        public static async Task UploadFile(string folder, string file)
+        public static async Task UploadFile(string folder, string filename, Stream stream)
         {
         	File metaData = new File
         	                {
-        		                Name     = Path.GetFileName(file),
+        		                Name     = filename,
         		                Parents  = new[] { folder },
         		                MimeType = "application/octet-stream"
         	                };
 
-        	await using FileStream stream = new FileStream(file, FileMode.Open);
-
         	FilesResource.CreateMediaUpload request = _service.Files.Create(metaData, stream, metaData.MimeType);
-        	await request.UploadAsync();
+        	IUploadProgress result = await request.UploadAsync();
+            Debug.Log(result.Exception);
         }
     }
 }
