@@ -62,3 +62,5 @@ crashlytics-build.properties
 Data.json
 UserSettings/
 App.config
+Assets/PrivateData/
+Assets/PrivateData.meta
