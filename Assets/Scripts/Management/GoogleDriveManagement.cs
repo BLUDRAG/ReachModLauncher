@@ -8,81 +8,95 @@ using File = Google.Apis.Drive.v3.Data.File;
 
 namespace ReachModLauncher
 {
-    public static class GoogleDriveManagement
-    {
-	    private static DriveService _service;
-        private static string       _repoDirectory;
-        private const  string       _dataLocation = "Data/GoogleDriveRepoData";
-        
-        public static void LoadData()
-        {
-            GoogleDriveRepoData data = Resources.Load<GoogleDriveRepoData>(_dataLocation);
-            _repoDirectory = data.RepoDirectory;
-            PrepareService(data.UserData);
-        }
+	public static class GoogleDriveManagement
+	{
+		private static DriveService _service;
+		private static string       _repoDirectory;
+		private const  string       _dataLocation = "Data/GoogleDriveRepoData";
 
-        private static void PrepareService(string user)
-        {
-	        GoogleCredential credentials = GoogleCredential.FromJson(user)
-	                                                       .CreateScoped(DriveService.Scope.Drive);
+		public static void LoadData()
+		{
+			GoogleDriveRepoData data = Resources.Load<GoogleDriveRepoData>(_dataLocation);
+			_repoDirectory = data.RepoDirectory;
+			PrepareService(data.UserData);
+		}
 
-	        _service = new DriveService(new Google.Apis.Services.BaseClientService.Initializer
-	                                    {
-		                                    HttpClientInitializer = credentials
-	                                    });
-        }
+		private static void PrepareService(string user)
+		{
+			GoogleCredential credentials = GoogleCredential.FromJson(user)
+			                                               .CreateScoped(DriveService.Scope.Drive);
 
-        public static async Task<(bool exists, string id)> FileExists(string folder, string file)
-        {
-        	FilesResource.ListRequest fileRequest = _service.Files.List();
-        	fileRequest.Fields = "*";
-        	fileRequest.Q      = $"'me' in owners and '{folder}' in parents and name = '{file}'";
-        	IList<File> files = (await fileRequest.ExecuteAsync()).Files;
+			_service = new DriveService(new Google.Apis.Services.BaseClientService.Initializer
+			                            {
+				                            HttpClientInitializer = credentials
+			                            });
+		}
 
-        	return (files.Count > 0, files.Count > 0 ? files[0].Id : null);
-        }
+		public static async Task<(bool exists, string id)> FileExists(string folder, string file)
+		{
+			FilesResource.ListRequest fileRequest = _service.Files.List();
+			fileRequest.Fields = "*";
+			fileRequest.Q      = $"'me' in owners and '{folder}' in parents and name = '{file}'";
+			IList<File> files = (await fileRequest.ExecuteAsync()).Files;
 
-        public static async Task<(bool exists, string id)> FolderExists(string folder)
-        {
-        	return await FileExists(_repoDirectory, folder);
-        }
-        
-        public static async Task<string> CreateFolder(string folder)
-        {
-        	File metaData = new File
-        	                {
-        		                Name     = folder,
-        		                Parents  = new[] { _repoDirectory },
-        		                MimeType = "application/vnd.google-apps.folder"
-        	                };
+			return (files.Count > 0, files.Count > 0 ? files[0].Id : null);
+		}
 
-        	FilesResource.CreateRequest request = _service.Files.Create(metaData);
-        	request.Fields = "*";
-        	File result = await request.ExecuteAsync();
+		public static async Task<(bool exists, string id)> FolderExists(string folder)
+		{
+			return await FileExists(_repoDirectory, folder);
+		}
 
-        	return result.Id;
-        }
-        
-        public static async Task<IList<File>> GetFiles(string folder)
-        {
-        	FilesResource.ListRequest fileRequest = _service.Files.List();
-        	fileRequest.Q = $"'me' in owners and '{folder}' in parents";
-        	IList<File> files = (await fileRequest.ExecuteAsync()).Files;
+		public static async Task<string> CreateFolder(string folder)
+		{
+			File metaData = new File
+			                {
+				                Name = folder,
+				                Parents = new[]
+				                          {
+					                          _repoDirectory
+				                          },
+				                MimeType = "application/vnd.google-apps.folder"
+			                };
 
-        	return files;
-        }
-        
-        public static async Task UploadFile(string folder, string filename, Stream stream)
-        {
-        	File metaData = new File
-        	                {
-        		                Name     = filename,
-        		                Parents  = new[] { folder },
-        		                MimeType = "application/octet-stream"
-        	                };
+			FilesResource.CreateRequest request = _service.Files.Create(metaData);
+			request.Fields = "*";
+			File result = await request.ExecuteAsync();
 
-        	FilesResource.CreateMediaUpload request = _service.Files.Create(metaData, stream, metaData.MimeType);
-        	await request.UploadAsync();
-        }
-    }
+			return result.Id;
+		}
+
+		public static async Task<IList<File>> GetFiles(string folder)
+		{
+			FilesResource.ListRequest fileRequest = _service.Files.List();
+			fileRequest.Q = $"'me' in owners and '{folder}' in parents";
+			IList<File> files = (await fileRequest.ExecuteAsync()).Files;
+
+			return files;
+		}
+
+		public static async Task UploadFile(string folder, string filename, Stream stream)
+		{
+			File metaData = new File
+			                {
+				                Name = filename,
+				                Parents = new[]
+				                          {
+					                          folder
+				                          },
+				                MimeType = "application/octet-stream"
+			                };
+
+			FilesResource.CreateMediaUpload request = _service.Files.Create(metaData, stream, metaData.MimeType);
+
+			try
+			{
+				await request.UploadAsync();
+			}
+			finally
+			{
+				await stream.DisposeAsync();
+			}
+		}
+	}
 }
