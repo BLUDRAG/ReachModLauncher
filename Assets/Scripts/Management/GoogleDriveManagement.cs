@@ -3,7 +3,6 @@ using System.IO;
 using System.Threading.Tasks;
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Drive.v3;
-using Google.Apis.Upload;
 using UnityEngine;
 using File = Google.Apis.Drive.v3.Data.File;
 
@@ -83,8 +82,7 @@ namespace ReachModLauncher
         	                };
 
         	FilesResource.CreateMediaUpload request = _service.Files.Create(metaData, stream, metaData.MimeType);
-        	IUploadProgress result = await request.UploadAsync();
-            Debug.Log(result.Exception);
+        	await request.UploadAsync();
         }
     }
 }
