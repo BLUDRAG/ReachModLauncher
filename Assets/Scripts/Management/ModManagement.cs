@@ -15,6 +15,7 @@ namespace ReachModLauncher
 	{
 		private static ModEntry _modEntryTemplate;
 		private static List<ReachGamingMod> _mods;
+		private static List<ModEntry> _modEntries = new List<ModEntry>();
 		private static readonly Dictionary<WebClient, ManageButton> _progressPairs = new Dictionary<WebClient, ManageButton>();
 		private const string _modListLink = "https://raw.githubusercontent.com/BLUDRAG/ReachGamingModsVault/release/ModList.json";
 		
@@ -31,7 +32,7 @@ namespace ReachModLauncher
 
 			foreach(ReachGamingMod mod in _mods)
 			{
-				AddModEntry(mod);
+				_modEntries.Add(AddModEntry(mod));
 			}
 		}
 
@@ -60,13 +61,21 @@ namespace ReachModLauncher
 			return stream.ToArray();
 		}
 
+		public static void ApplySearchFilter(string filter)
+		{
+			foreach(ModEntry entry in _modEntries)
+			{
+				entry.gameObject.SetActive(entry.Mod.Name.Contains(filter, StringComparison.OrdinalIgnoreCase));
+			}
+		}
+
 		private static void OnDownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
 		{
 			WebClient client = (WebClient)sender;
 			_progressPairs[client].ProgressBar.localScale = new Vector3(e.ProgressPercentage / 100f, 1f, 1f);
 		}
 
-		private static void AddModEntry(ReachGamingMod mod)
+		private static ModEntry AddModEntry(ReachGamingMod mod)
 		{
 			ModEntry entry = Object.Instantiate(_modEntryTemplate, _modEntryTemplate.transform.parent);
 			entry.gameObject.SetActive(true);
@@ -136,6 +145,7 @@ namespace ReachModLauncher
 			                                     };
 
 			entry.VersionDropdown.IsUpdateAvailable();
+			return entry;
 		}
 	}
 }
