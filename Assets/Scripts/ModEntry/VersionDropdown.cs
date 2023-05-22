@@ -9,7 +9,7 @@ namespace ReachModLauncher
 		public TMP_Dropdown                 Dropdown;
 		public GameObject                   UpdateIcon;
 		public List<ReachGamingModVersions> Versions = new List<ReachGamingModVersions>();
-		public ManageButton                 ManageButton;
+		public ModManageButton              ManageButton;
 		public ReachGamingMod               Mod;
 
 		public void OnVersionChanged(int index)

@@ -7,6 +7,6 @@ namespace ReachModLauncher
 		public ReachGamingMod  Mod;
 		public ModLink         ModLink;
 		public VersionDropdown VersionDropdown;
-		public ManageButton    ManageButton;
+		public ModManageButton ManageButton;
 	}
 }

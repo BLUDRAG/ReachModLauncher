@@ -341,7 +341,7 @@ MonoBehaviour:
     Mods: []
   ModLink: {fileID: 684562859}
   VersionDropdown: {fileID: 653886121}
-  ManageButton: {fileID: 1811614447}
+  ManageButton: {fileID: 0}
 --- !u!1 &20727380
 GameObject:
   m_ObjectHideFlags: 0
@@ -6665,7 +6665,7 @@ MonoBehaviour:
   Dropdown: {fileID: 653886122}
   UpdateIcon: {fileID: 179850204}
   Versions: []
-  ManageButton: {fileID: 1811614447}
+  ManageButton: {fileID: 0}
   Mod:
     Name: 
     Description: 
@@ -17300,15 +17300,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf0f136c4a32a67408bc3a86f5d67f77, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ModDownloadInfo:
-    Link: 
-    Name: 
-    Version: 
   Manage: {fileID: 155044993}
   Text: {fileID: 196944682}
   Progress: {fileID: 1497829886}
   ProgressBar: {fileID: 1231255936}
-  VersionDropdown: {fileID: 653886121}
 --- !u!114 &1811614448
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20445,17 +20440,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 9113989931826327503}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cf0f136c4a32a67408bc3a86f5d67f77, type: 3}
+  m_Script: {fileID: 11500000, guid: 1066ebd4b5c9fff418ede2197a46dd9e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ModDownloadInfo:
-    Link: 
-    Name: 
-    Version: 
   Manage: {fileID: 1139587657}
   Text: {fileID: 1390739239}
   Progress: {fileID: 1603960047}
   ProgressBar: {fileID: 724271161}
+  ModDownloadInfo:
+    Link: 
+    Name: 
+    Version: 
   VersionDropdown: {fileID: 702472053}
 --- !u!1 &9114126716540858821
 GameObject:

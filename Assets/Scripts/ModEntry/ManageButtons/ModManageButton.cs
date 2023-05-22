@@ -1,28 +1,23 @@
 using System.IO;
 using System.IO.Compression;
 using System.Threading.Tasks;
-using TMPro;
-using UnityEngine;
 
 namespace ReachModLauncher
 {
-    public class ManageButton : MonoBehaviour
+    public class ModManageButton : ManageButton
     {
         public ModDownloadInfo ModDownloadInfo;
-        public GameObject      Manage;
-        public TMP_Text        Text;
-        public GameObject      Progress;
-        public Transform       ProgressBar;
         public VersionDropdown VersionDropdown;
 
-        public void OnClick()
+        public override void OnClick()
         {
-            InstalledMod installedMod = DataManagement.GetSaveData().InstalledMods.Find(x => x.Name == ModDownloadInfo.Name);
+            InstalledMod installedMod =
+                DataManagement.GetSaveData().InstalledMods.Find(x => x.Name == ModDownloadInfo.Name);
 
             if(installedMod != null && installedMod.Version == ModDownloadInfo.Version)
             {
                 DeleteMod(installedMod);
-                Text.text = "Download";
+                UpdateManageState("Download");
                 VersionDropdown.IsUpdateAvailable();
 
                 return;
@@ -33,8 +28,8 @@ namespace ReachModLauncher
 
             DeleteMod(installedMod);
             _ = DownloadMod();
-        }
-
+        } 
+        
         private void DeleteMod(InstalledMod installedMod)
         {
             SaveData saveData = DataManagement.GetSaveData();
@@ -67,11 +62,10 @@ namespace ReachModLauncher
             }
 
             string zipFile = Path.Combine(modsFolder, $"{sanitizedName}.zip");
-
-            File.WriteAllBytes(zipFile, data);
+            await File.WriteAllBytesAsync(zipFile, data);
             ZipFile.ExtractToDirectory(zipFile, modsFolder);
             string versionFile = Path.Combine(modsFolder, sanitizedName, "Version.txt");
-            string version     = File.ReadAllText(versionFile);
+            string version     = await File.ReadAllTextAsync(versionFile);
 
             InstalledMod installedMod = saveData.InstalledMods.Find(x => x.Name == ModDownloadInfo.Name);
 
@@ -82,7 +76,7 @@ namespace ReachModLauncher
                                    Name = ModDownloadInfo.Name,
                                    Version = version
                                };
-
+                
                 saveData.InstalledMods.Add(installedMod);
             }
             else

@@ -6,7 +6,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using TMPro;
-using UnityEngine;
 using Object = UnityEngine.Object;
 
 namespace ReachModLauncher
@@ -16,7 +15,7 @@ namespace ReachModLauncher
 		private static ModEntry _modEntryTemplate;
 		private static List<ReachGamingMod> _mods;
 		private static List<ModEntry> _modEntries = new List<ModEntry>();
-		private static readonly Dictionary<WebClient, ManageButton> _progressPairs = new Dictionary<WebClient, ManageButton>();
+		private static readonly Dictionary<WebClient, ModManageButton> _progressPairs = new Dictionary<WebClient, ModManageButton>();
 		private const string _modListLink = "https://raw.githubusercontent.com/BLUDRAG/ReachGamingModsVault/release/ModList.json";
 		
 		public static void Init(ModEntry modEntryTemplate)
@@ -36,15 +35,15 @@ namespace ReachModLauncher
 			}
 		}
 
-		public static async Task<byte[]> DownloadFile(string url, ManageButton manageButton = null)
+		public static async Task<byte[]> DownloadFile(string url, ModManageButton manageButton = null)
 		{
 			using WebClient client = new WebClient();
 
 			if(manageButton != null)
 			{
-				manageButton.ProgressBar.transform.localScale =  new Vector3(0f, 1f, 1f);
-				_progressPairs[client]                        =  manageButton;
-				client.DownloadProgressChanged                += OnDownloadProgressChanged;
+				manageButton.UpdateProgress(0f);
+				_progressPairs[client]         =  manageButton;
+				client.DownloadProgressChanged += OnDownloadProgressChanged;
 			}
 
 			using MemoryStream stream = new MemoryStream(await client.DownloadDataTaskAsync(new Uri(url)));
@@ -54,9 +53,7 @@ namespace ReachModLauncher
 				return stream.ToArray();
 			}
 
-			manageButton.Manage.SetActive(true);
-			manageButton.Progress.SetActive(false);
-			manageButton.Text.text = "Delete";
+			manageButton.UpdateManageState("Delete");
 
 			return stream.ToArray();
 		}
@@ -72,7 +69,7 @@ namespace ReachModLauncher
 		private static void OnDownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
 		{
 			WebClient client = (WebClient)sender;
-			_progressPairs[client].ProgressBar.localScale = new Vector3(e.ProgressPercentage / 100f, 1f, 1f);
+			_progressPairs[client].UpdateProgress(e.ProgressPercentage / 100f);
 		}
 
 		private static ModEntry AddModEntry(ReachGamingMod mod)
@@ -135,7 +132,7 @@ namespace ReachModLauncher
 			entry.VersionDropdown.Mod = mod;
 			entry.ModLink.Link        = mod.Mods[modIndex].Link;
 
-			entry.ManageButton.Text.text = installedMod is null ? "Download" : "Delete";
+			entry.ManageButton.UpdateManageState(installedMod is null ? "Download" : "Delete");
 
 			entry.ManageButton.ModDownloadInfo = new ModDownloadInfo()
 			                                     {
