@@ -53,7 +53,7 @@ namespace ReachModLauncher
 				return stream.ToArray();
 			}
 
-			manageButton.UpdateManageState("Delete");
+			manageButton.UpdateManageState(ManageButtonStates.Delete);
 
 			return stream.ToArray();
 		}
@@ -132,7 +132,7 @@ namespace ReachModLauncher
 			entry.VersionDropdown.Mod = mod;
 			entry.ModLink.Link        = mod.Mods[modIndex].Link;
 
-			entry.ManageButton.UpdateManageState(installedMod is null ? "Download" : "Delete");
+			entry.ManageButton.UpdateManageState(installedMod is null ? ManageButtonStates.Download : ManageButtonStates.Delete);
 
 			entry.ManageButton.ModDownloadInfo = new ModDownloadInfo()
 			                                     {

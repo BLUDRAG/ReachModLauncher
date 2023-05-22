@@ -11,20 +11,16 @@ namespace ReachModLauncher
 
         public override void OnClick()
         {
-            InstalledMod installedMod =
-                DataManagement.GetSaveData().InstalledMods.Find(x => x.Name == ModDownloadInfo.Name);
+            InstalledMod installedMod = DataManagement.GetSaveData().InstalledMods.Find(x => x.Name == ModDownloadInfo.Name);
 
             if(installedMod != null && installedMod.Version == ModDownloadInfo.Version)
             {
                 DeleteMod(installedMod);
-                UpdateManageState("Download");
+                UpdateManageState(ManageButtonStates.Download);
                 VersionDropdown.IsUpdateAvailable();
 
                 return;
             }
-
-            Manage.SetActive(false);
-            Progress.SetActive(true);
 
             DeleteMod(installedMod);
             _ = DownloadMod();

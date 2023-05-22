@@ -16,7 +16,11 @@ namespace ReachModLauncher
         {
             InstalledMod installedMod = DataManagement.GetSaveData().InstalledMods.Find(x => x.Name == Mod.Name);
 
-            ManageButton.Text.text = installedMod is null ? "Download" : "Delete";
+            ManageButtonStates buttonState = installedMod is null ? ManageButtonStates.Download :
+	                                             installedMod.Version == Versions[index].Version ?
+		                                             ManageButtonStates.Delete : ManageButtonStates.Update;
+            
+            ManageButton.UpdateManageState(buttonState);
 
             ManageButton.ModDownloadInfo = new ModDownloadInfo()
                                            {
@@ -27,13 +31,11 @@ namespace ReachModLauncher
 
             if(installedMod is null)
             {
-	            ManageButton.Text.text = "Download";
 	            UpdateIcon.SetActive(true);
             }
             else
             {
 	            IsUpdateAvailable();
-	            ManageButton.Text.text = installedMod.Version == Versions[index].Version ? "Delete" : "Update";
             }
         }
 
