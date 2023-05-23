@@ -16623,7 +16623,7 @@ GameObject:
   - component: {fileID: 1770346625}
   - component: {fileID: 1770346624}
   m_Layer: 5
-  m_Name: Mod Entries Scroll View
+  m_Name: POI Entries Scroll View
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -17893,6 +17893,8 @@ MonoBehaviour:
   _targetLocation: {fileID: 497078901}
   _animationTime: 0.15
   _originalLocation: {fileID: 41900176}
+  _previewMaterial: {fileID: 2100000, guid: cc707aad06e71bb41bda8320dea3bfe7, type: 2}
+  _previewImage: {fileID: 472876104}
 --- !u!1 &1881213979
 GameObject:
   m_ObjectHideFlags: 0
