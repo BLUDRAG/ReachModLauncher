@@ -18,6 +18,8 @@ namespace ReachModLauncher
 				(".mesh", null, false), (".jpg", null, false),
 			};
 
+		private static string _previewFile;
+
 		public static void CapturePOIFiles(string directory)
 		{
 			ResetPOIFiles();
@@ -28,6 +30,8 @@ namespace ReachModLauncher
 				UpdatePOIList(_requiredPOIFiles, file);
 				UpdatePOIList(_optionalPOIFiles, file);
 			}
+			
+			_previewFile = _optionalPOIFiles.FirstOrDefault(file => file.type == ".jpg").file;
 		}
 
 		public static List<string> GetMissingPOIFiles()
@@ -53,6 +57,11 @@ namespace ReachModLauncher
 			poiFiles.AddRange(_optionalPOIFiles.Select(data => data.file).ToList());
 
 			return poiFiles;
+		}
+		
+		public static string GetPreviewFile()
+		{
+			return _previewFile;
 		}
 
 		private static void ResetPOIFiles()
