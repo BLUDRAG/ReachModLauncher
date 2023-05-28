@@ -1,6 +1,9 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
+using File = Google.Apis.Drive.v3.Data.File;
 
 namespace ReachModLauncher
 {
@@ -62,6 +65,37 @@ namespace ReachModLauncher
 		public static string GetPreviewFile()
 		{
 			return _previewFile;
+		}
+
+		public static async Task<List<POIData>> GetPOIData(string user)
+		{
+			List<POIData> poiData  = new List<POIData>();
+			List<File>    files    = await GoogleDriveManagement.GetFiles(user);
+			List<File>    poiFiles = files.Where(file => file.FileExtension == "zip").ToList();
+			
+			poiFiles.Sort((file1, file2) => string.Compare(file1.Name, file2.Name, StringComparison.Ordinal));
+
+			foreach(File poiFile in poiFiles)
+			{
+				POIData data = new POIData
+				{
+					User = user,
+					File = poiFile,
+				};
+				
+				string poiFileName = Path.GetFileNameWithoutExtension(poiFile.Name);
+				File previewFile = files.FirstOrDefault(file => Path.GetFileNameWithoutExtension(file.Name) == poiFileName
+				                                             && file.FileExtension                          == "jpg");
+				
+				if(previewFile is not null)
+				{
+					data.Preview = await GoogleDriveManagement.DownloadFile(previewFile, null);
+				}
+
+				poiData.Add(data);
+			}
+
+			return poiData;
 		}
 
 		private static void ResetPOIFiles()

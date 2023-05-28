@@ -1,4 +1,5 @@
 using System;
+using Google.Apis.Drive.v3.Data;
 
 namespace ReachModLauncher
 {
@@ -6,6 +7,7 @@ namespace ReachModLauncher
     public class POIData
     {
         public string User;
+        public File   File;
         public byte[] Preview;
     }
 }
