@@ -1495,6 +1495,7 @@ GameObject:
   - component: {fileID: 155165747}
   - component: {fileID: 155165748}
   - component: {fileID: 155165749}
+  - component: {fileID: 155165750}
   m_Layer: 5
   m_Name: Enable Feature Toggle
   m_TagString: Untagged
@@ -1570,9 +1571,9 @@ MonoBehaviour:
   onValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: ReachModLauncher.Main, Assembly-CSharp
-        m_MethodName: checkBox1_CheckedChanged
+      - m_Target: {fileID: 155165750}
+        m_TargetAssemblyTypeName: ReachModLauncher.CustomGameToggle, Assembly-CSharp
+        m_MethodName: ToggleCustomGame
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1599,6 +1600,19 @@ MonoBehaviour:
     7 Days To Die game.
   useMousePosition: 1
   offset: {x: 0, y: 0, z: 0}
+--- !u!114 &155165750
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 155165746}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55baba5c93da5e24b9c7ee6c245af5cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Toggle: {fileID: 155165748}
 --- !u!1 &164895521
 GameObject:
   m_ObjectHideFlags: 0

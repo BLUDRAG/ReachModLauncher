@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using SimpleFileBrowser;
 using UnityEngine.UI;
@@ -64,7 +65,7 @@ namespace ReachModLauncher
 			                           "Select Steam Game Folder");
 		}
 
-		public static void SelectCustomFolder(bool continuePlay = false, string continueGame = "")
+		public static void SelectCustomFolder(bool continuePlay = false, string continueGame = "", Action onCancel = null)
 		{
 			FileBrowser.ShowLoadDialog(success =>
 			                           {
@@ -79,6 +80,7 @@ namespace ReachModLauncher
 			                           },
 			                           () =>
 			                           {
+				                           onCancel?.Invoke();
 			                           }, FileBrowser.PickMode.Folders, false, null, null, "Select Custom Game Folder");
 		}
 	}
