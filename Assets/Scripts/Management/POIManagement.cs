@@ -13,7 +13,8 @@ namespace ReachModLauncher
 		private static POIEntry       _poiEntryTemplate;
 		private static string         _previewFile;
 		private static List<POIEntry> _poiEntries       = new List<POIEntry>();
-		private static string         _rootPOIDirectory = Path.Combine("Mods", "ReachCustomPOIs", "Prefabs", "POIs");
+		private static string         _rootPOIDirectory = Path.Combine("Mods",            "ReachCustomPOIs");
+		private static string         _modPOIDirectory  = Path.Combine(_rootPOIDirectory, "Prefabs", "POIs");
 		
 		private static readonly (string type, string file, bool found)[] _requiredPOIFiles =
 			new (string, string, bool)[]
@@ -27,9 +28,12 @@ namespace ReachModLauncher
 				(".mesh", null, false), (".jpg", null, false),
 			};
 
-		public static void Init(POIEntry poiEntryTemplate)
+		private static string _modInfo;
+
+		public static void Init(POIEntry poiEntryTemplate, string modInfo)
 		{
 			_poiEntryTemplate = poiEntryTemplate;
+			_modInfo          = modInfo;
 		}
 
 		public static async Task DownloadPOIList()
@@ -125,7 +129,27 @@ namespace ReachModLauncher
 
 		public static string GetPOIDirectory(POIData data)
 		{
-			return Path.Combine(DataManagement.GetGameFolder(), _rootPOIDirectory, data.Author, Path.GetFileNameWithoutExtension(data.File.Name));
+			string poiFolder = Path.Combine(DataManagement.GetGameFolder(), _modPOIDirectory, data.Author,
+			                                Path.GetFileNameWithoutExtension(data.File.Name));
+			
+			if(!Directory.Exists(poiFolder))
+			{
+				Directory.CreateDirectory(poiFolder);
+			}
+			
+			GenerateModInfo();
+			return poiFolder;
+		}
+
+		private static async void GenerateModInfo()
+		{
+			string poiFolder   = Path.Combine(DataManagement.GetGameFolder(), _rootPOIDirectory);
+			string modInfoFile = Path.Combine(poiFolder,                      "ModInfo.xml");
+
+			if(!System.IO.File.Exists(modInfoFile))
+			{
+				await System.IO.File.WriteAllTextAsync(modInfoFile, _modInfo);
+			}
 		}
 
 		private static void ResetPOIFiles()

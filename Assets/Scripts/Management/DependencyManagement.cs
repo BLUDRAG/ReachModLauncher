@@ -11,6 +11,7 @@ namespace ReachModLauncher
 		[SerializeField] private Folder         _steamGameFolder;
 		[SerializeField] private Folder         _customGameFolder;
 		[SerializeField] private Toggle         _playCustomToggle;
+		[SerializeField] private TextAsset      _poiModInfo;
 		
 		private void Awake()
 		{
@@ -20,7 +21,7 @@ namespace ReachModLauncher
 		private void InjectManagementDependencies()
 		{
 			ModManagement.Init(_modEntryTemplate);
-			POIManagement.Init(_poiEntryTemplate);
+			POIManagement.Init(_poiEntryTemplate, _poiModInfo.text);
 			FolderManagement.Init(_steamGameFolder, _customGameFolder, _playCustomToggle);
 			DataManagement.Init(_copyGameDialog);
 		}

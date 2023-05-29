@@ -17,11 +17,6 @@ namespace ReachModLauncher
             byte[] data       = await GoogleDriveManagement.DownloadFile(Data.File, UpdateProgress);
             string poiFolder  = POIManagement.GetPOIDirectory(Data);
 
-            if(!Directory.Exists(poiFolder))
-            {
-                Directory.CreateDirectory(poiFolder);
-            }
-
             using ZipArchive archive = new ZipArchive(new MemoryStream(data), ZipArchiveMode.Read);
             archive.ExtractToDirectory(poiFolder);
             UpdateManageState(ManageButtonStates.Delete);
