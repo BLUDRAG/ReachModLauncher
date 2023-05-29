@@ -71,9 +71,9 @@ namespace ReachModLauncher
 			return files.ToList();
 		}
 
-		public static async Task<List<string>> GetUsers()
+		public static async Task<List<File>> GetUsers()
 		{
-			return (await GetFiles(_repoDirectory)).Select(file => file.Id).ToList();
+			return await GetFiles(_repoDirectory);
 		}
 
 		public static async Task UploadFile(string folder, string filename, Stream stream)

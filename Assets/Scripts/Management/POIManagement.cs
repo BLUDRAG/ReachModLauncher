@@ -33,15 +33,15 @@ namespace ReachModLauncher
 
 		public static async Task DownloadPOIList()
 		{
-			IList<string> users = await GoogleDriveManagement.GetUsers();
+			IList<File> users = await GoogleDriveManagement.GetUsers();
 
-			foreach(string user in users)
+			foreach(File user in users)
 			{
-				List<POIData> data = await POIManagement.GetPOIData(user);
+				List<POIData> data = await GetPOIData(user.Id);
 
 				foreach(POIData poiData in data)
 				{
-					_poiEntries.Add(AddPOIEntry(poiData));
+					_poiEntries.Add(AddPOIEntry(poiData, user.Name));
 				}
 			}
 		}
@@ -153,11 +153,11 @@ namespace ReachModLauncher
 			}
 		}
 
-		private static POIEntry AddPOIEntry(POIData data)
+		private static POIEntry AddPOIEntry(POIData data, string author)
 		{
 			POIEntry entry = Object.Instantiate(_poiEntryTemplate, _poiEntryTemplate.transform.parent);
 			entry.gameObject.SetActive(true);
-			entry.Init(data);
+			entry.Init(data, author);
 
 			return entry;
 		}

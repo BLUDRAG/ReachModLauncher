@@ -1,4 +1,5 @@
 using System.IO;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,12 +10,14 @@ namespace ReachModLauncher
         public POIData  Data;
         public TextLink Link;
         public Image    Preview;
+        public TMP_Text Author;
 
-        public void Init(POIData data)
+        public void Init(POIData data, string author)
         {
             Data           = data;
             Link.Text.text = Path.GetFileName(Data.File.Name);
             Link.Link      = Data.File.WebContentLink;
+            Author.text    = author;
 
             if(Data.Preview is not null)
             {
