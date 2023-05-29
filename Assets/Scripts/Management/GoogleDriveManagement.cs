@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Download;
 using Google.Apis.Drive.v3;
+using Google.Apis.Drive.v3.Data;
+using Google.Apis.Upload;
 using UnityEngine;
 using File = Google.Apis.Drive.v3.Data.File;
 
@@ -22,17 +24,6 @@ namespace ReachModLauncher
 			GoogleDriveRepoData data = Resources.Load<GoogleDriveRepoData>(_dataLocation);
 			_repoDirectory = data.RepoDirectory;
 			PrepareService(data.UserData);
-		}
-
-		private static void PrepareService(string user)
-		{
-			GoogleCredential credentials = GoogleCredential.FromJson(user)
-			                                               .CreateScoped(DriveService.Scope.Drive);
-
-			_service = new DriveService(new Google.Apis.Services.BaseClientService.Initializer
-			                            {
-				                            HttpClientInitializer = credentials
-			                            });
 		}
 
 		public static async Task<(bool exists, string id)> FileExists(string folder, string file)
@@ -98,13 +89,16 @@ namespace ReachModLauncher
 			                };
 
 			FilesResource.CreateMediaUpload request = _service.Files.Create(metaData, stream, metaData.MimeType);
+			request.Fields = "*";
 
 			try
 			{
+				request.ResponseReceived += UpdateFilePermission;
 				await request.UploadAsync();
 			}
 			finally
 			{
+				request.ResponseReceived -= UpdateFilePermission;
 				await stream.DisposeAsync();
 			}
 		}
@@ -124,6 +118,29 @@ namespace ReachModLauncher
 			}
 			
 			return stream.ToArray();
+		}
+
+		private static void PrepareService(string user)
+		{
+			GoogleCredential credentials = GoogleCredential.FromJson(user)
+			                                               .CreateScoped(DriveService.Scope.Drive);
+
+			_service = new DriveService(new Google.Apis.Services.BaseClientService.Initializer
+			                            {
+				                            HttpClientInitializer = credentials
+			                            });
+		}
+
+		private static async void UpdateFilePermission(File file)
+		{
+			Permission permission = new Permission
+			                       {
+				                       Role = "reader",
+				                       Type = "anyone"
+			                       };
+
+			PermissionsResource.CreateRequest request = _service.Permissions.Create(permission, file.Id);
+			await request.ExecuteAsync();
 		}
 	}
 }
