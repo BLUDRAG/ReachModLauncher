@@ -16,8 +16,6 @@ namespace ReachModLauncher
                 AddFilesToArchive(archive, files);
             }
 
-            stream.Seek(0, SeekOrigin.Begin);
-
             return stream;
         }
 
