@@ -28,6 +28,11 @@ namespace ReachModLauncher
 			return _saveData;
 		}
 
+		public static string GetGameFolder()
+		{
+			return _saveData.PlayCustom ? _saveData.CustomGameFolder : _saveData.SteamGameFolder;
+		}
+
 		public static bool LoadData()
 		{
 			string saveFile = Path.Combine(Directory.GetCurrentDirectory(), _saveFile);

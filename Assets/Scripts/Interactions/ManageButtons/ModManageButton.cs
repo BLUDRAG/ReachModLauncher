@@ -29,9 +29,7 @@ namespace ReachModLauncher
         private void DeleteMod(InstalledMod installedMod)
         {
             SaveData saveData = DataManagement.GetSaveData();
-            string gameFolder = !saveData.PlayCustom
-                                    ? saveData.SteamGameFolder
-                                    : saveData.CustomGameFolder;
+            string gameFolder = DataManagement.GetGameFolder();
 
             string modsFolder    = Path.Combine(gameFolder, "Mods");
             string sanitizedName = ModDownloadInfo.Name.Replace(" ", "");
@@ -48,7 +46,7 @@ namespace ReachModLauncher
         {
             SaveData saveData      = DataManagement.GetSaveData();
             byte[]   data          = await ModManagement.DownloadFile(ModDownloadInfo.Link, this);
-            string   gameFolder    = !saveData.PlayCustom ? saveData.SteamGameFolder : saveData.CustomGameFolder;
+            string   gameFolder    = DataManagement.GetGameFolder();
             string   modsFolder    = Path.Combine(gameFolder, "Mods");
             string   sanitizedName = ModDownloadInfo.Name.Replace(" ", "");
 

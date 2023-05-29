@@ -91,7 +91,7 @@ namespace ReachModLauncher
 			InstalledMod installedMod = null;
 
 			SaveData saveData      = DataManagement.GetSaveData();
-			string   gameFolder    = !saveData.PlayCustom ? saveData.SteamGameFolder : saveData.CustomGameFolder;
+			string   gameFolder    = DataManagement.GetGameFolder();
 			string   modsFolder    = Path.Combine(gameFolder, "Mods");
 			string   sanitizedName = mod.Name.Replace(" ", "");
 			string   versionFile   = Path.Combine(modsFolder, sanitizedName, "Version.txt");

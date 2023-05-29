@@ -16,7 +16,7 @@ namespace ReachModLauncher
 				return;
 			}
 
-			string gameFolder = !saveData.PlayCustom ? saveData.SteamGameFolder : saveData.CustomGameFolder;
+			string gameFolder = DataManagement.GetGameFolder();
 			string gameFile   = Path.Combine(gameFolder, version);
 
 			if(!File.Exists(gameFile))
