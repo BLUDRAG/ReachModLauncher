@@ -4,11 +4,16 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using File = Google.Apis.Drive.v3.Data.File;
+using Object = UnityEngine.Object;
 
 namespace ReachModLauncher
 {
-	public static class POIFileManagement
+	public static class POIManagement
 	{
+		private static POIEntry       _poiEntryTemplate;
+		private static string         _previewFile;
+		private static List<POIEntry> _poiEntries = new List<POIEntry>();
+		
 		private static readonly (string type, string file, bool found)[] _requiredPOIFiles =
 			new (string, string, bool)[]
 			{
@@ -21,7 +26,25 @@ namespace ReachModLauncher
 				(".mesh", null, false), (".jpg", null, false),
 			};
 
-		private static string _previewFile;
+		public static void Init(POIEntry poiEntryTemplate)
+		{
+			_poiEntryTemplate = poiEntryTemplate;
+		}
+
+		public static async Task DownloadPOIList()
+		{
+			IList<string> users = await GoogleDriveManagement.GetUsers();
+
+			foreach(string user in users)
+			{
+				List<POIData> data = await POIManagement.GetPOIData(user);
+
+				foreach(POIData poiData in data)
+				{
+					_poiEntries.Add(AddPOIEntry(poiData));
+				}
+			}
+		}
 
 		public static void CapturePOIFiles(string directory)
 		{
@@ -73,7 +96,7 @@ namespace ReachModLauncher
 			List<File>    files    = await GoogleDriveManagement.GetFiles(user);
 			List<File>    poiFiles = files.Where(file => file.FileExtension == "zip").ToList();
 			
-			poiFiles.Sort((file1, file2) => string.Compare(file1.Name, file2.Name, StringComparison.Ordinal));
+			poiFiles.Sort((file1, file2) => string.Compare(file2.Name, file1.Name, StringComparison.Ordinal));
 
 			foreach(File poiFile in poiFiles)
 			{
@@ -128,6 +151,15 @@ namespace ReachModLauncher
 				list[i].file  = file;
 				list[i].found = true;
 			}
+		}
+
+		private static POIEntry AddPOIEntry(POIData data)
+		{
+			POIEntry entry = Object.Instantiate(_poiEntryTemplate, _poiEntryTemplate.transform.parent);
+			entry.gameObject.SetActive(true);
+			entry.Init(data);
+
+			return entry;
 		}
 	}
 }
