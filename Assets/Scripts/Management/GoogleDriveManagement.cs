@@ -103,7 +103,7 @@ namespace ReachModLauncher
 			}
 		}
 		
-		public static async Task<byte[]> DownloadFile(File file, Action<long> progressCallback)
+		public static async Task<byte[]> DownloadFile(File file, Action<float> progressCallback)
 		{
 			FilesResource.GetRequest request = _service.Files.Get(file.Id);
 			request.Fields = "*";
@@ -113,7 +113,7 @@ namespace ReachModLauncher
 			
 			while(!progress.IsCompleted)
 			{
-				progressCallback?.Invoke(progress.Result.BytesDownloaded / totalBytes);
+				progressCallback?.Invoke((float)progress.Result.BytesDownloaded / totalBytes);
 				await Task.Yield();
 			}
 			

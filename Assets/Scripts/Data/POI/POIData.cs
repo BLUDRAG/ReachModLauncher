@@ -7,6 +7,7 @@ namespace ReachModLauncher
     public class POIData
     {
         public string User;
+        public string Author;
         public File   File;
         public byte[] Preview;
     }

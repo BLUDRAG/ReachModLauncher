@@ -7,17 +7,19 @@ namespace ReachModLauncher
 {
     public class POIEntry : MonoBehaviour
     {
-        public POIData  Data;
-        public TextLink Link;
-        public Image    Preview;
-        public TMP_Text Author;
+        public POIData         Data;
+        public TextLink        Link;
+        public Image           Preview;
+        public TMP_Text        Author;
+        public POIManageButton ManageButton;
 
         public void Init(POIData data, string author)
         {
-            Data           = data;
-            Link.Text.text = Path.GetFileName(Data.File.Name);
-            Link.Link      = Data.File.WebContentLink;
-            Author.text    = author;
+            Data              = data;
+            Link.Text.text    = Path.GetFileName(Data.File.Name);
+            Link.Link         = Data.File.WebContentLink;
+            Author.text       = author;
+            ManageButton.Data = Data;
 
             if(Data.Preview is not null)
             {

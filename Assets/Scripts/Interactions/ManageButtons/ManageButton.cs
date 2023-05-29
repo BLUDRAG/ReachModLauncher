@@ -3,16 +3,14 @@ using UnityEngine;
 
 namespace ReachModLauncher
 {
-    public class ManageButton : MonoBehaviour
+    public abstract class ManageButton : MonoBehaviour
     {
         public GameObject Manage;
         public TMP_Text   Text;
         public GameObject Progress;
         public Transform  ProgressBar;
 
-        public virtual void OnClick()
-        {
-        }
+        public abstract void OnClick();
 
         public void UpdateManageState(ManageButtonStates state)
         {

@@ -12,7 +12,8 @@ namespace ReachModLauncher
 	{
 		private static POIEntry       _poiEntryTemplate;
 		private static string         _previewFile;
-		private static List<POIEntry> _poiEntries = new List<POIEntry>();
+		private static List<POIEntry> _poiEntries       = new List<POIEntry>();
+		private static string         _rootPOIDirectory = Path.Combine("Mods", "ReachCustomPOIs", "Prefabs", "POIs");
 		
 		private static readonly (string type, string file, bool found)[] _requiredPOIFiles =
 			new (string, string, bool)[]
@@ -37,7 +38,7 @@ namespace ReachModLauncher
 
 			foreach(File user in users)
 			{
-				List<POIData> data = await GetPOIData(user.Id);
+				List<POIData> data = await GetPOIData(user.Id, user.Name);
 
 				foreach(POIData poiData in data)
 				{
@@ -90,7 +91,7 @@ namespace ReachModLauncher
 			return _previewFile;
 		}
 
-		public static async Task<List<POIData>> GetPOIData(string user)
+		public static async Task<List<POIData>> GetPOIData(string user, string author)
 		{
 			List<POIData> poiData  = new List<POIData>();
 			List<File>    files    = await GoogleDriveManagement.GetFiles(user);
@@ -102,8 +103,9 @@ namespace ReachModLauncher
 			{
 				POIData data = new POIData
 				{
-					User = user,
-					File = poiFile,
+					User   = user,
+					Author = author,
+					File   = poiFile,
 				};
 				
 				string poiFileName = Path.GetFileNameWithoutExtension(poiFile.Name);
@@ -119,6 +121,11 @@ namespace ReachModLauncher
 			}
 
 			return poiData;
+		}
+
+		public static string GetPOIDirectory(POIData data)
+		{
+			return Path.Combine(DataManagement.GetGameFolder(), _rootPOIDirectory, data.Author, Path.GetFileNameWithoutExtension(data.File.Name));
 		}
 
 		private static void ResetPOIFiles()
