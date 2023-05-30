@@ -6,7 +6,18 @@ namespace ReachModLauncher
     public class POIManageButton : ManageButton
     {
         public POIData Data;
+
+        private bool   _downloading      = false;
+        private float  _downloadProgress = 0f;
         
+        private void Update()
+        {
+            if(_downloading)
+            {
+                UpdateProgress(_downloadProgress);
+            }
+        }
+
         public override void OnClick()
         {
             DownloadPOI();
@@ -14,12 +25,20 @@ namespace ReachModLauncher
 
         private async void DownloadPOI()
         {
-            byte[] data       = await GoogleDriveManagement.DownloadFile(Data.File, UpdateProgress);
-            string poiFolder  = POIManagement.GetPOIDirectory(Data);
+            _downloadProgress = 0f;
+            _downloading      = true;
+            byte[] data = await GoogleDriveManagement.DownloadFile(Data.File, UpdateDownloadProgress);
+            _downloading = false;
 
+            string poiFolder  = POIManagement.GetPOIDirectory(Data);
             using ZipArchive archive = new ZipArchive(new MemoryStream(data), ZipArchiveMode.Read);
             archive.ExtractToDirectory(poiFolder);
             UpdateManageState(ManageButtonStates.Delete);
+        }
+        
+        private void UpdateDownloadProgress(float percentage)
+        {
+            _downloadProgress = percentage;
         }
     }
 }

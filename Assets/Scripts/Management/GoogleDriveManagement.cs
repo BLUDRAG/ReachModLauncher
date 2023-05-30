@@ -107,17 +107,22 @@ namespace ReachModLauncher
 		{
 			FilesResource.GetRequest request = _service.Files.Get(file.Id);
 			request.Fields = "*";
-			long                    totalBytes = file.Size ?? long.MaxValue;
-			MemoryStream            stream     = new MemoryStream();
-			Task<IDownloadProgress> progress   = request.DownloadAsync(stream);
+			long         totalBytes = file.Size ?? long.MaxValue;
+			MemoryStream stream     = new MemoryStream();
 			
-			while(!progress.IsCompleted)
-			{
-				progressCallback?.Invoke((float)progress.Result.BytesDownloaded / totalBytes);
-				await Task.Yield();
-			}
+			request.MediaDownloader.ProgressChanged += UpdateDownloadProgress(progressCallback, totalBytes);
+			await request.DownloadAsync(stream);
+			request.MediaDownloader.ProgressChanged -= UpdateDownloadProgress(progressCallback, totalBytes);
 			
 			return stream.ToArray();
+		}
+
+		private static Action<IDownloadProgress> UpdateDownloadProgress(Action<float> progressCallback, long totalBytes)
+		{
+			return progress =>
+			       {
+				       progressCallback?.Invoke((float)progress.BytesDownloaded / totalBytes);
+			       };
 		}
 
 		private static void PrepareService(string user)
