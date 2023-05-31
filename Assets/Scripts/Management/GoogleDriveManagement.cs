@@ -7,7 +7,6 @@ using Google.Apis.Auth.OAuth2;
 using Google.Apis.Download;
 using Google.Apis.Drive.v3;
 using Google.Apis.Drive.v3.Data;
-using Google.Apis.Upload;
 using UnityEngine;
 using File = Google.Apis.Drive.v3.Data.File;
 

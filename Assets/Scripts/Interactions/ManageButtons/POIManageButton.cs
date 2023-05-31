@@ -7,9 +7,9 @@ namespace ReachModLauncher
     {
         public POIData Data;
 
-        private bool   _downloading      = false;
-        private float  _downloadProgress = 0f;
-        
+        private bool  _downloading      = false;
+        private float _downloadProgress = 0f;
+
         private void Update()
         {
             if(_downloading)
@@ -20,7 +20,24 @@ namespace ReachModLauncher
 
         public override void OnClick()
         {
-            DownloadPOI();
+            string poiFolder = POIManagement.GetPOIDirectory(Data, false);
+            
+            if(Directory.Exists(poiFolder))
+            {
+                DeletePOI();
+            }
+            else
+            {
+                DownloadPOI();
+            }
+        }
+
+        public void Init(POIData data)
+        {
+            Data = data;
+            string poiFolder = POIManagement.GetPOIDirectory(Data, false);
+            
+            UpdateManageState(Directory.Exists(poiFolder) ? ManageButtonStates.Delete : ManageButtonStates.Download);
         }
 
         private async void DownloadPOI()
@@ -35,7 +52,14 @@ namespace ReachModLauncher
             archive.ExtractToDirectory(poiFolder);
             UpdateManageState(ManageButtonStates.Delete);
         }
-        
+
+        private void DeletePOI()
+        {
+            string poiFolder = POIManagement.GetPOIDirectory(Data);
+            Directory.Delete(poiFolder, true);
+            UpdateManageState(ManageButtonStates.Download);
+        }
+
         private void UpdateDownloadProgress(float percentage)
         {
             _downloadProgress = percentage;

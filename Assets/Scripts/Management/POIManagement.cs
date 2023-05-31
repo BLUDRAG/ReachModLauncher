@@ -127,12 +127,12 @@ namespace ReachModLauncher
 			return poiData;
 		}
 
-		public static string GetPOIDirectory(POIData data)
+		public static string GetPOIDirectory(POIData data, bool create = true)
 		{
 			string poiFolder = Path.Combine(DataManagement.GetGameFolder(), _modPOIDirectory, data.Author,
 			                                Path.GetFileNameWithoutExtension(data.File.Name));
 			
-			if(!Directory.Exists(poiFolder))
+			if(create && !Directory.Exists(poiFolder))
 			{
 				Directory.CreateDirectory(poiFolder);
 			}

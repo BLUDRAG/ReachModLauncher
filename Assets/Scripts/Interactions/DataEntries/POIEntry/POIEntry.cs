@@ -19,7 +19,7 @@ namespace ReachModLauncher
             Link.Text.text    = Path.GetFileName(Data.File.Name);
             Link.Link         = Data.File.WebContentLink;
             Author.text       = author;
-            ManageButton.Data = Data;
+            ManageButton.Init(Data);
 
             if(Data.Preview is not null)
             {
