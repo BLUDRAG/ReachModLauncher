@@ -7,6 +7,7 @@ namespace ReachModLauncher
         public void Search(string text)
         {
             ModManagement.ApplySearchFilter(text);
+            POIManagement.ApplySearchFilter(text);
         }
     }
 }

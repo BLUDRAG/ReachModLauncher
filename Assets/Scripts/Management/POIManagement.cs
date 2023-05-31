@@ -141,6 +141,15 @@ namespace ReachModLauncher
 			return poiFolder;
 		}
 
+		public static void ApplySearchFilter(string filter)
+		{
+			foreach(POIEntry entry in _poiEntries)
+			{
+				entry.gameObject.SetActive(entry.Data.File.Name.Contains(filter, StringComparison.OrdinalIgnoreCase) ||
+				                           entry.Author.text.Contains(filter, StringComparison.OrdinalIgnoreCase));
+			}
+		}
+
 		private static async void GenerateModInfo()
 		{
 			string poiFolder   = Path.Combine(DataManagement.GetGameFolder(), _rootPOIDirectory);
