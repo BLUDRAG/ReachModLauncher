@@ -3,7 +3,7 @@ using UnityEngine.UI.Extensions;
 
 namespace ReachModLauncher
 {
-	public class ModLink : TextLink
+	public sealed class ModLink : TextLink
 	{
 		public List<BoundTooltipTriggerExtended> Tooltips = new List<BoundTooltipTriggerExtended>();
 	}

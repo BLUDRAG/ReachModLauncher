@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 namespace ReachModLauncher
 {
-	public class Molotov : MonoBehaviour, IPointerDownHandler
+	public sealed class Molotov : MonoBehaviour, IPointerDownHandler
 	{
 		public Transform   MolotovRoot;
 		public Image       MolotovImage;

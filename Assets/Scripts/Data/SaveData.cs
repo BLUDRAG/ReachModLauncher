@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace ReachModLauncher
 {
     [Serializable]
-    public class SaveData
+    public sealed class SaveData
     {
         public string             SteamGameFolder;
         public string             CustomGameFolder;

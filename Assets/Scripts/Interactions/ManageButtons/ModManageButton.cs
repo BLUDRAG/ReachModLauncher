@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace ReachModLauncher
 {
-    public class ModManageButton : ManageButton
+    public sealed class ModManageButton : ManageButton
     {
         public ModDownloadInfo ModDownloadInfo;
         public VersionDropdown VersionDropdown;

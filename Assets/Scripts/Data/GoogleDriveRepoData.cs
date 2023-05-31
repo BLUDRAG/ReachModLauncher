@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace ReachModLauncher
 {
-    public class GoogleDriveRepoData : ScriptableObject
+    public sealed class GoogleDriveRepoData : ScriptableObject
     {
         public string RepoDirectory => _repoDirectory;
         public string UserData      => _userData.text;

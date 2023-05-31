@@ -6,8 +6,8 @@ using UnityEngine.EventSystems;
 namespace UnityEngine.UI.Extensions
 {
     [AddComponentMenu("UI/Extensions/Bound Tooltip/Bound Tooltip Trigger Extended")]
-    public class BoundTooltipTriggerExtended : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, ISelectHandler,
-                                       IDeselectHandler
+    public sealed class BoundTooltipTriggerExtended : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, ISelectHandler,
+                                                      IDeselectHandler
     {
         [TextAreaAttribute]
         public string text;

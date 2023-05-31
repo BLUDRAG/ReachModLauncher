@@ -6,7 +6,7 @@ using TMPro;
 namespace UnityEngine.UI.Extensions
 {
     [AddComponentMenu("UI/Extensions/Bound Tooltip/Bound Tooltip Item Extended")]
-    public class BoundTooltipItemExtended : MonoBehaviour
+    public sealed class BoundTooltipItemExtended : MonoBehaviour
     {
         public bool IsActive
         {

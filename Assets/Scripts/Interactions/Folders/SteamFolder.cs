@@ -1,6 +1,6 @@
 namespace ReachModLauncher
 {
-	public class SteamFolder : Folder
+	public sealed class SteamFolder : Folder
 	{
 		public override void Select()
 		{

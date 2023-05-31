@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace ReachModLauncher
 {
-    public class POIEntry : MonoBehaviour
+    public sealed class POIEntry : MonoBehaviour
     {
         public POIData         Data;
         public TextLink        Link;

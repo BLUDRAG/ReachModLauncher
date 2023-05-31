@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 namespace ReachModLauncher
 {
-    public class PreviewAnimator : MonoBehaviour
+    public sealed class PreviewAnimator : MonoBehaviour
     {
         [SerializeField] private Transform _animationTarget;
         [SerializeField] private Transform _targetLocation;

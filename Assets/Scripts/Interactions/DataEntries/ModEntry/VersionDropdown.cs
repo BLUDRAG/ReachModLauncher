@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace ReachModLauncher
 {
-	public class VersionDropdown : MonoBehaviour
+	public sealed class VersionDropdown : MonoBehaviour
 	{
 		public TMP_Dropdown                 Dropdown;
 		public GameObject                   UpdateIcon;

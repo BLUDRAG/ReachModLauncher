@@ -4,7 +4,7 @@ using Google.Apis.Drive.v3.Data;
 namespace ReachModLauncher
 {
     [Serializable]
-    public class POIData
+    public sealed class POIData
     {
         public string User;
         public string Author;

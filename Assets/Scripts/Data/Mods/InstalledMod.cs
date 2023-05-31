@@ -3,7 +3,7 @@ using System;
 namespace ReachModLauncher
 {
     [Serializable]
-    public class InstalledMod
+    public sealed class InstalledMod
     {
         public string Name;
         public string Version;

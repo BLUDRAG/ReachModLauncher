@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace ReachModLauncher
 {
     [Serializable]
-    public class ReachGamingMod
+    public sealed class ReachGamingMod
     {
         public string                       Name;
         public string                       Description;

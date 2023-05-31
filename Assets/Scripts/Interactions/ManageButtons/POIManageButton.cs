@@ -3,7 +3,7 @@ using System.IO.Compression;
 
 namespace ReachModLauncher
 {
-    public class POIManageButton : ManageButton
+    public sealed class POIManageButton : ManageButton
     {
         public POIData Data;
 

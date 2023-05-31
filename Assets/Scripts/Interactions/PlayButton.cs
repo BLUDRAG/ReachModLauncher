@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace ReachModLauncher
 {
-	public class PlayButton : MonoBehaviour
+	public sealed class PlayButton : MonoBehaviour
 	{
 		[SerializeField] private string _game;
 		

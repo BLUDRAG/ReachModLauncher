@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 namespace ReachModLauncher
 {
-	public class CustomGameToggle : MonoBehaviour
+	public sealed class CustomGameToggle : MonoBehaviour
 	{
 		public Toggle Toggle;
 		

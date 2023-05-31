@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace ReachModLauncher
 {
-    public class DropdownObjectToggle : MonoBehaviour
+    public sealed class DropdownObjectToggle : MonoBehaviour
     {
         public List<GameObject> Objects = new List<GameObject>();
 

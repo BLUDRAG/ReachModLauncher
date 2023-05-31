@@ -3,7 +3,7 @@ using System;
 namespace ReachModLauncher
 {
     [Serializable]
-    public class ModDownloadInfo
+    public sealed class ModDownloadInfo
     {
         public string Link;
         public string Name;

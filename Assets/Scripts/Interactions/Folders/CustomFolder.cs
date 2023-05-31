@@ -1,6 +1,6 @@
 namespace ReachModLauncher
 {
-	public class CustomFolder : Folder
+	public sealed class CustomFolder : Folder
 	{
 		public override void Select()
 		{
