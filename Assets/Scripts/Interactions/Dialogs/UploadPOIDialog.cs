@@ -16,6 +16,7 @@ namespace ReachModLauncher
         [SerializeField] private Button         _uploadButton;
         [SerializeField] private TMP_Text       _uploadButtonText;
         [SerializeField] private TMP_Text       _authorText;
+        [SerializeField] private TMP_Text       _errorText;
         [SerializeField] private TMP_InputField _poiFolder;
 
         private        long  _currentFileBytes;
@@ -34,6 +35,7 @@ namespace ReachModLauncher
             string steamUser = SteamManagement.GetSteamUser();
             _authorText.text = $"Author : <b>{steamUser}</b>";
             _poiFolder.text  = "";
+            _errorText.text  = "";
             _progressBarParent.SetActive(false);
             _uploadButton.gameObject.SetActive(true);
             CheckUploadLimit(steamUser);
@@ -142,7 +144,8 @@ namespace ReachModLauncher
 
             if(missingFiles.Count <= 0) return true;
 
-            Debug.Log($"Missing required files : {missingFiles.Aggregate((current, next) => $"{current}, {next}")}");
+            string aggregatedFiles = missingFiles.Aggregate((current, next) => $"{current}, <b>{next}</b>");
+            _errorText.text = $"<u>Missing File{(missingFiles.Count > 1 ? "s" : "")}</u> : {aggregatedFiles}";
             return false;
         }
 
