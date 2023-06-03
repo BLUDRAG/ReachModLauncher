@@ -6,13 +6,15 @@ using Google.Apis.Upload;
 using SimpleFileBrowser;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace ReachModLauncher
 {
     public sealed class UploadPOIDialog : Dialog
     {
         [SerializeField] private GameObject     _progressBarParent;
-        [SerializeField] private GameObject     _uploadButton;
+        [SerializeField] private Button         _uploadButton;
+        [SerializeField] private TMP_Text       _uploadButtonText;
         [SerializeField] private TMP_Text       _authorText;
         [SerializeField] private TMP_InputField _poiFolder;
 
@@ -29,13 +31,16 @@ namespace ReachModLauncher
         
         public override Task Show()
         {
-            _authorText.text = $"Author : <b>{SteamManagement.GetSteamUser()}</b>";
+            string steamUser = SteamManagement.GetSteamUser();
+            _authorText.text = $"Author : <b>{steamUser}</b>";
             _poiFolder.text  = "";
             _progressBarParent.SetActive(false);
-            _uploadButton.SetActive(true);
+            _uploadButton.gameObject.SetActive(true);
+            CheckUploadLimit(steamUser);
+
             return base.Show();
         }
-        
+
         public void ShowOnClick()
         {
             _ = Show();
@@ -78,7 +83,7 @@ namespace ReachModLauncher
 
         private async Task UploadPOIInternal()
         {
-            _uploadButton.SetActive(false);
+            _uploadButton.gameObject.SetActive(false);
             _progressBarParent.SetActive(true);
             
             string user = SteamManagement.GetSteamUser();
@@ -115,9 +120,11 @@ namespace ReachModLauncher
                 }
             }
 
+            POIManagement.UpdateUploadCount();
             await POIManagement.DownloadPOIList();
             _currentFileBytes = 0;
-            _uploadButton.SetActive(true);
+            CheckUploadLimit(user);
+            _uploadButton.gameObject.SetActive(true);
             _progressBarParent.SetActive(false);
         }
 
@@ -142,6 +149,14 @@ namespace ReachModLauncher
         private void OnUploadProgressUpdated(IUploadProgress progress)
         {
             _currentUploadProgress = (float)progress.BytesSent / _currentFileBytes;
+        }
+
+        private void CheckUploadLimit(string steamUser)
+        {
+            if(GoogleDriveManagement.CanUpload(steamUser)) return;
+
+            _uploadButton.interactable = false;
+            _uploadButtonText.text     = "Limit Reached";
         }
     }
 }

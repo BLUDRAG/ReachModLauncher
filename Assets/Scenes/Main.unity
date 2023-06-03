@@ -475,7 +475,8 @@ MonoBehaviour:
   _progressText: {fileID: 1603271620}
   _inputBlocker: {fileID: 1578071808}
   _progressBarParent: {fileID: 1791409828}
-  _uploadButton: {fileID: 2077269800}
+  _uploadButton: {fileID: 2077269802}
+  _uploadButtonText: {fileID: 737184701}
   _authorText: {fileID: 1253509591}
   _poiFolder: {fileID: 515589326}
 --- !u!222 &23318537
@@ -8512,10 +8513,10 @@ RectTransform:
   m_Father: {fileID: 2077269801}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMin: {x: 0.060000002, y: 0.087000005}
+  m_AnchorMax: {x: 0.94000006, y: 0.91300005}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0.000030517578, y: 0}
+  m_SizeDelta: {x: -0.42099953, y: -0.3717}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &737184701
 MonoBehaviour:
@@ -8564,7 +8565,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 17.4
+  m_fontSize: 14.1
   m_fontSizeBase: 24
   m_fontWeight: 400
   m_enableAutoSizing: 1

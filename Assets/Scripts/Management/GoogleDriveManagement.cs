@@ -15,15 +15,17 @@ namespace ReachModLauncher
 {
 	public static class GoogleDriveManagement
 	{
-		private static DriveService _service;
-		private static string       _repoDirectory;
-		private const  string       _dataLocation = "Data/GoogleDriveRepoData";
+		private static DriveService           _service;
+		private static GoogleDriveUploadRules _uploadRules;
+		private static string                 _repoDirectory;
+		private const  string                 _dataLocation = "Data/GoogleDriveRepoData";
 
 		public static void LoadData()
 		{
 			GoogleDriveRepoData data = Resources.Load<GoogleDriveRepoData>(_dataLocation);
 			_repoDirectory = data.RepoDirectory;
 			PrepareService(data.UserData);
+			_ = GetUploadRules(data);
 		}
 
 		public static async Task<(bool exists, string id)> FileExists(string folder, string file)
@@ -119,6 +121,12 @@ namespace ReachModLauncher
 			return stream.ToArray();
 		}
 
+		public static bool CanUpload(string author)
+		{
+			int uploadCount = POIManagement.GetPOIUploadCount();
+			return !(uploadCount >= _uploadRules.DailyUploadLimit || _uploadRules.UserBlacklist.Exists(user => user.User == author));
+		}
+
 		private static Action<IDownloadProgress> UpdateDownloadProgress(Action<float> progressCallback, long totalBytes)
 		{
 			return progress =>
@@ -148,6 +156,15 @@ namespace ReachModLauncher
 
 			PermissionsResource.CreateRequest request = _service.Permissions.Create(permission, file.Id);
 			await request.ExecuteAsync();
+		}
+
+		private static async Task GetUploadRules(GoogleDriveRepoData data)
+		{
+			FilesResource.GetRequest request   = _service.Files.Get(data.UploadRules);
+			File                     file      = await request.ExecuteAsync();
+			byte[]                   fileBytes = await DownloadFile(file, null);
+			string                   fileData  = System.Text.Encoding.UTF8.GetString(fileBytes);
+			_uploadRules = JsonUtility.FromJson<GoogleDriveUploadRules>(fileData);
 		}
 	}
 }

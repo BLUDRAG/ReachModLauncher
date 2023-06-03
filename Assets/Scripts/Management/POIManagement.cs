@@ -2,7 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
+using UnityEngine;
 using File = Google.Apis.Drive.v3.Data.File;
 using Object = UnityEngine.Object;
 
@@ -12,10 +15,14 @@ namespace ReachModLauncher
 	{
 		private static POIEntry       _poiEntryTemplate;
 		private static string         _previewFile;
+		private static string         _currentTime;
 		private static List<POIEntry> _poiEntries       = new List<POIEntry>();
 		private static string         _rootPOIDirectory = Path.Combine("Mods",            "ReachCustomPOIs");
 		private static string         _modPOIDirectory  = Path.Combine(_rootPOIDirectory, "Prefabs", "POIs");
-		
+		private const  string         _timeURL          = "http://worldclockapi.com/api/json/utc/now";
+		private const  string         _lastUploadDate   = "POI_MANAGEMENT_LastUploadDate";
+		private const  string         _lastUploadCount  = "POI_MANAGEMENT_LastUploadCount";
+
 		private static readonly (string type, string file, bool found)[] _requiredPOIFiles =
 			new (string, string, bool)[]
 			{
@@ -34,6 +41,9 @@ namespace ReachModLauncher
 		{
 			_poiEntryTemplate = poiEntryTemplate;
 			_modInfo          = modInfo;
+
+			_currentTime = PlayerPrefs.GetString(_lastUploadDate, $"{DateTime.Now.Year}-{DateTime.Now.DayOfYear}");
+			_            = GetCurrentTime();
 		}
 
 		public static async Task DownloadPOIList()
@@ -151,6 +161,24 @@ namespace ReachModLauncher
 			}
 		}
 
+		public static int GetPOIUploadCount()
+		{
+			_ = GetCurrentTime();
+			string lastUploadDate = PlayerPrefs.GetString(_lastUploadDate, "");
+
+			if(_currentTime == lastUploadDate) return PlayerPrefs.GetInt(_lastUploadCount, 0);
+
+			PlayerPrefs.SetString(_lastUploadDate, _currentTime);
+			PlayerPrefs.SetInt(_lastUploadCount, 0);
+			return 0;
+		}
+		
+		public static void UpdateUploadCount()
+		{
+			int uploadCount = GetPOIUploadCount() + 1;
+			PlayerPrefs.SetInt(_lastUploadCount, uploadCount);
+		}
+
 		private static async void GenerateModInfo()
 		{
 			string poiFolder   = Path.Combine(DataManagement.GetGameFolder(), _rootPOIDirectory);
@@ -211,6 +239,19 @@ namespace ReachModLauncher
 			}
 
 			_poiEntries.Clear();
+		}
+
+		private static async Task GetCurrentTime()
+		{
+			HttpClient          client   = new HttpClient();
+			HttpResponseMessage response = await client.GetAsync(_timeURL);
+
+			if(!response.IsSuccessStatusCode) return;
+
+			string       content    = await response.Content.ReadAsStringAsync();
+			TimeResponse timeObject = JsonConvert.DeserializeObject<TimeResponse>(content);
+
+			_currentTime = timeObject.OrdinalDate;
 		}
 	}
 }
