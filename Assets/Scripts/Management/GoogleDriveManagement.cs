@@ -7,6 +7,7 @@ using Google.Apis.Auth.OAuth2;
 using Google.Apis.Download;
 using Google.Apis.Drive.v3;
 using Google.Apis.Drive.v3.Data;
+using Google.Apis.Upload;
 using UnityEngine;
 using File = Google.Apis.Drive.v3.Data.File;
 
@@ -75,7 +76,7 @@ namespace ReachModLauncher
 			return await GetFiles(_repoDirectory);
 		}
 
-		public static async Task UploadFile(string folder, string filename, Stream stream)
+		public static async Task UploadFile(string folder, string filename, Stream stream, Action<IUploadProgress> onProgressChanged)
 		{
 			File metaData = new File
 			                {
@@ -93,11 +94,13 @@ namespace ReachModLauncher
 			try
 			{
 				request.ResponseReceived += UpdateFilePermission;
+				request.ProgressChanged  += onProgressChanged;
 				await request.UploadAsync();
 			}
 			finally
 			{
 				request.ResponseReceived -= UpdateFilePermission;
+				request.ProgressChanged  -= onProgressChanged;
 				await stream.DisposeAsync();
 			}
 		}

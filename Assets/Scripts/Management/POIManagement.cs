@@ -38,6 +38,7 @@ namespace ReachModLauncher
 
 		public static async Task DownloadPOIList()
 		{
+			RemovePOIEntries();
 			IList<File> users = await GoogleDriveManagement.GetUsers();
 
 			foreach(File user in users)
@@ -155,7 +156,7 @@ namespace ReachModLauncher
 			string poiFolder   = Path.Combine(DataManagement.GetGameFolder(), _rootPOIDirectory);
 			string modInfoFile = Path.Combine(poiFolder,                      "ModInfo.xml");
 
-			if(!System.IO.File.Exists(modInfoFile))
+			if(!System.IO.File.Exists(modInfoFile) && Directory.Exists(poiFolder))
 			{
 				await System.IO.File.WriteAllTextAsync(modInfoFile, _modInfo);
 			}
@@ -200,6 +201,16 @@ namespace ReachModLauncher
 			entry.Init(data, author);
 
 			return entry;
+		}
+		
+		private static void RemovePOIEntries()
+		{
+			foreach(POIEntry entry in _poiEntries)
+			{
+				Object.Destroy(entry.gameObject);
+			}
+
+			_poiEntries.Clear();
 		}
 	}
 }
