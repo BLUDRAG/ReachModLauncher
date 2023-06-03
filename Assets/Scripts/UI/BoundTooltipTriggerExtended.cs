@@ -12,19 +12,26 @@ namespace UnityEngine.UI.Extensions
         [TextAreaAttribute]
         public string text;
 
-        public bool useMousePosition = false;
+        public bool useMousePosition = true;
 
-        public Vector3 offset;
+        public Vector2 offset;
+
+        private RectTransform _rectTransform;
+
+        private void Start()
+        {
+            _rectTransform = (RectTransform)transform;
+        }
 
         public void OnPointerEnter(PointerEventData eventData)
         {
             if(useMousePosition)
             {
-                StartHover(new Vector3(eventData.position.x, eventData.position.y, 0f));
+                StartHover(GetRelativePosition(new Vector2(eventData.position.x, eventData.position.y)));
             }
             else
             {
-                StartHover(transform.position + offset);
+                StartHover(GetRelativePosition(transform.position) + offset);
             }
         }
 
@@ -51,6 +58,36 @@ namespace UnityEngine.UI.Extensions
         void StopHover()
         {
             BoundTooltipItemExtended.Instance.HideTooltip();
+        }
+
+        private Vector2 GetRelativePosition(Vector2 screenPoint)
+        {
+            Vector2 relativePosition = transform.position;
+            Rect    rect             = _rectTransform.rect;
+            Vector2 screenHalves     = new Vector2(Screen.width / 2f, Screen.height / 2f);
+
+            if(screenPoint.x < screenHalves.x && screenPoint.y > screenHalves.y) // Top Left
+            {
+                relativePosition.x = rect.xMax;
+                relativePosition.y = rect.yMin;
+            }
+            else if(screenPoint.x > screenHalves.x && screenPoint.y > screenHalves.y) // Top Right
+            {
+                relativePosition.x = rect.xMin;
+                relativePosition.y = rect.yMin;
+            }
+            else if(screenPoint.x < screenHalves.x && screenPoint.y < screenHalves.y) // Bottom Left
+            {
+                relativePosition.x = rect.xMax;
+                relativePosition.y = rect.yMax;
+            }
+            else // Bottom Right
+            {
+                relativePosition.x = rect.xMin;
+                relativePosition.y = rect.yMax;
+            }
+
+            return _rectTransform.TransformPoint(relativePosition);
         }
     }
 }

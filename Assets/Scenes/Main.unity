@@ -12470,9 +12470,9 @@ RectTransform:
   - {fileID: 808493972}
   - {fileID: 931035442}
   - {fileID: 483534629}
-  - {fileID: 471274149}
   - {fileID: 993416037}
   - {fileID: 1582075271}
+  - {fileID: 471274149}
   m_Father: {fileID: 2077297152}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

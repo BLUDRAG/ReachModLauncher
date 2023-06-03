@@ -56,7 +56,7 @@ namespace UnityEngine.UI.Extensions
                 anchor = BottomRight;
             }
             
-            transform.position = pos + ToolTipOffset - transform.InverseTransformPoint(anchor.position);
+            transform.position = pos + ToolTipOffset - (anchor.position - transform.position);
 
             gameObject.SetActive(true);
         }
