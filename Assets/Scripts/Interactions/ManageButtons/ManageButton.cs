@@ -6,9 +6,10 @@ namespace ReachModLauncher
     public abstract class ManageButton : MonoBehaviour
     {
         public GameObject Manage;
-        public TMP_Text   Text;
+        public TMP_Text   StateText;
         public GameObject Progress;
         public Transform  ProgressBar;
+        public TMP_Text   ProgressText;
 
         public abstract void OnClick();
 
@@ -16,7 +17,7 @@ namespace ReachModLauncher
         {
             Manage.SetActive(true);
             Progress.SetActive(false);
-            Text.text = state.ToString();
+            StateText.text = state.ToString();
         }
 
         public void UpdateProgress(float percentage)
@@ -24,6 +25,7 @@ namespace ReachModLauncher
             Manage.SetActive(false);
             Progress.SetActive(true);
             ProgressBar.localScale = new Vector3(percentage, 1f, 1f);
+            ProgressText.text = $"{(int)(percentage * 100f)}%";
         }
     }
 }
