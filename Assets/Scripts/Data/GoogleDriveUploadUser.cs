@@ -3,7 +3,7 @@ using System;
 namespace ReachModLauncher
 {
     [Serializable]
-    public class GoogleDriveUploadUser
+    public sealed class GoogleDriveUploadUser
     {
         public string User;
     }
