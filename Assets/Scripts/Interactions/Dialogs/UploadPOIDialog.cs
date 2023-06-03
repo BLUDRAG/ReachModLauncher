@@ -13,10 +13,20 @@ namespace ReachModLauncher
             return base.Show();
         }
         
+        public void ShowOnClick()
+        {
+            _ = Show();
+        }
+        
         public override async Task Hide()
         {
             await base.Hide();
             _progressBarParent.SetActive(false);
+        }
+
+        public void HideOnClick()
+        {
+            _ = Hide();
         }
 
         public override void UpdateProgress(float percentage)

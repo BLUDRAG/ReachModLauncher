@@ -8,14 +8,16 @@ namespace ReachModLauncher
 {
     public abstract class Dialog : MonoBehaviour
     {
-        [SerializeField] protected Image    _progressBar;
-        [SerializeField] protected TMP_Text _progressText;
-        [SerializeField] private   Image    _inputBlocker;
+        [SerializeField] private   GameObject _visualRoot;
+        [SerializeField] protected Image      _progressBar;
+        [SerializeField] protected TMP_Text   _progressText;
+        [SerializeField] private   Image      _inputBlocker;
 
         public virtual async Task Show()
         {
             UpdateProgress(0f);
             gameObject.SetActive(true);
+            _visualRoot.SetActive(true);
             bool complete = false;
             _inputBlocker.DOFade(0.3f, 0.5f).OnComplete(() => complete = true);
 
@@ -27,6 +29,7 @@ namespace ReachModLauncher
 
         public virtual async Task Hide()
         {
+            _visualRoot.SetActive(false);
             bool complete = false;
             
             _inputBlocker.DOFade(0f, 0.5f)
