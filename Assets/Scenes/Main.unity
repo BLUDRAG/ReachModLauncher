@@ -475,6 +475,7 @@ MonoBehaviour:
   _progressText: {fileID: 1603271620}
   _inputBlocker: {fileID: 1578071808}
   _progressBarParent: {fileID: 1791409828}
+  _authorText: {fileID: 1253509591}
 --- !u!222 &23318537
 CanvasRenderer:
   m_ObjectHideFlags: 0

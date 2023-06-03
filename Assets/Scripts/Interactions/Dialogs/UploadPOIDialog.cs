@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using TMPro;
 using UnityEngine;
 
 namespace ReachModLauncher
@@ -6,9 +7,11 @@ namespace ReachModLauncher
     public sealed class UploadPOIDialog : Dialog
     {
         [SerializeField] private GameObject _progressBarParent;
+        [SerializeField] private TMP_Text _authorText;
         
         public override Task Show()
         {
+            _authorText.text = $"Author : <b>{SteamManagement.GetSteamUser()}</b>";
             _progressBarParent.SetActive(false);
             return base.Show();
         }
