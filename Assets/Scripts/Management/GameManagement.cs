@@ -57,7 +57,6 @@ namespace ReachModLauncher
 				string file       = files[i];
 				string targetFile = file.Replace(local, copy);
 				Directory.CreateDirectory(Path.GetDirectoryName(targetFile));
-				// File.Copy(file, targetFile);
 
 				await using FileStream sourceStream = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.Read,
 				                                                     bufferSize: 4096, useAsync: true);
@@ -67,8 +66,6 @@ namespace ReachModLauncher
 				                                                          useAsync: true);
 
 				await sourceStream.CopyToAsync(destinationStream);
-
-				// await Task.Delay(100);
 			}
 
 			_dialog.Hide();
