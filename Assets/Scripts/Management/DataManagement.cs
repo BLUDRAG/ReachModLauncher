@@ -1,20 +1,16 @@
-using System.Diagnostics;
 using System.IO;
-using System.Threading.Tasks;
 using Newtonsoft.Json;
 
 namespace ReachModLauncher
 {
 	public static class DataManagement
 	{
-		private static SaveData       _saveData;
-		private static CopyGameDialog _dialog;
+		private static SaveData _saveData;
 
 		private const string _saveFile = "Data.json";
 		
-		public static void Init(CopyGameDialog dialog)
+		public static void Init()
 		{
-			_dialog = dialog;
 			LoadData();
 		}
 
@@ -53,34 +49,6 @@ namespace ReachModLauncher
 			string saveFile = Path.Combine(Directory.GetCurrentDirectory(), _saveFile);
 			string json     = JsonConvert.SerializeObject(_saveData);
 			File.WriteAllText(saveFile, json);
-		}
-
-		public static async Task CreateCopy(string gameFile)
-		{
-			string   local = _saveData.SteamGameFolder;
-			string   copy  = _saveData.CustomGameFolder;
-			string[] files = Directory.GetFiles(local, "*", SearchOption.AllDirectories);
-
-			_dialog.ProgressBar.fillAmount = 0f;
-			_dialog.gameObject.SetActive(true);
-
-			if(!Directory.Exists(copy))
-			{
-				Directory.CreateDirectory(copy);
-			}
-
-			for(int i = 0; i < files.Length; i++)
-			{
-				_dialog.ProgressBar.fillAmount = i / (float)files.Length;
-				string file       = files[i];
-				string targetFile = file.Replace(local, copy);
-				Directory.CreateDirectory(Path.GetDirectoryName(targetFile));
-				File.Copy(file, targetFile);
-				if(i % 100 == 0) await Task.Delay(1);
-			}
-
-			_dialog.gameObject.SetActive(false);
-			Process.Start(gameFile);
 		}
 	}
 }

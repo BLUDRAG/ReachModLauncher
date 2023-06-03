@@ -1,11 +1,19 @@
 using System.Diagnostics;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace ReachModLauncher
 {
 	public static class GameManagement
 	{
-		public static void PlayGame(string version)
+		private static CopyGameDialog _dialog;
+
+		public static void Init(CopyGameDialog dialog)
+		{
+			_dialog = dialog;
+		}
+		
+		public static async void PlayGame(string version)
 		{
 			SaveData saveData = DataManagement.GetSaveData();
 			
@@ -21,11 +29,49 @@ namespace ReachModLauncher
 
 			if(!File.Exists(gameFile))
 			{
-				_ = DataManagement.CreateCopy(gameFile);
+				await CreateCopy(gameFile);
 
 				return;
 			}
 
+			Process.Start(gameFile);
+		}
+
+		public static async Task CreateCopy(string gameFile)
+		{
+			SaveData saveData = DataManagement.GetSaveData();
+			string   local    = saveData.SteamGameFolder;
+			string   copy     = saveData.CustomGameFolder;
+			string[] files    = Directory.GetFiles(local, "*", SearchOption.AllDirectories);
+
+			await _dialog.Show();
+
+			if(!Directory.Exists(copy))
+			{
+				Directory.CreateDirectory(copy);
+			}
+
+			for(int i = 0, totalFiles = files.Length; i < totalFiles; i++)
+			{
+				_dialog.UpdateProgress(i / (float)totalFiles);
+				string file       = files[i];
+				string targetFile = file.Replace(local, copy);
+				Directory.CreateDirectory(Path.GetDirectoryName(targetFile));
+				// File.Copy(file, targetFile);
+
+				await using FileStream sourceStream = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.Read,
+				                                                     bufferSize: 4096, useAsync: true);
+
+				await using FileStream destinationStream = new FileStream(targetFile, FileMode.CreateNew,
+				                                                          FileAccess.Write, FileShare.None, bufferSize: 4096,
+				                                                          useAsync: true);
+
+				await sourceStream.CopyToAsync(destinationStream);
+
+				// await Task.Delay(100);
+			}
+
+			_dialog.Hide();
 			Process.Start(gameFile);
 		}
 	}
