@@ -68,7 +68,7 @@ namespace ReachModLauncher
 				await sourceStream.CopyToAsync(destinationStream);
 			}
 
-			_dialog.Hide();
+			_ = _dialog.Hide();
 			Process.Start(gameFile);
 		}
 	}
