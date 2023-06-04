@@ -1,17 +1,21 @@
 using System.IO;
 using Newtonsoft.Json;
+using UnityEngine;
 
 namespace ReachModLauncher
 {
 	public static class DataManagement
 	{
-		private static SaveData _saveData;
+		private static SaveData      _saveData;
+		private static SuperUserData _superUserData;
 
-		private const string _saveFile = "Data.json";
+		private const string _saveFile      = "Data.json";
+		private const string _superUserFile = "SuperUser.json";
 		
 		public static void Init()
 		{
 			LoadData();
+			LoadSuperUserData();
 		}
 
 		public static SaveData GetSaveData()
@@ -49,6 +53,29 @@ namespace ReachModLauncher
 			string saveFile = Path.Combine(Directory.GetCurrentDirectory(), _saveFile);
 			string json     = JsonConvert.SerializeObject(_saveData);
 			File.WriteAllText(saveFile, json);
+		}
+
+		private static void LoadSuperUserData()
+		{
+			string superUserFile = Path.Combine(Directory.GetParent(Application.dataPath).FullName, _superUserFile);
+			if(!File.Exists(superUserFile)) return;
+
+			_superUserData = JsonUtility.FromJson<SuperUserData>(File.ReadAllText(superUserFile));
+			
+			if(!GoogleDriveManagement.VerifySuperUser(_superUserData.VerificationKey))
+			{
+				_superUserData = null;
+			}
+		}
+
+		public static bool IsSuperUser()
+		{
+			return _superUserData is not null;
+		}
+		
+		public static SuperUserData GetSuperUserData()
+		{
+			return _superUserData;
 		}
 	}
 }

@@ -24,7 +24,6 @@ namespace ReachModLauncher
 			POIManagement.Init(_poiEntryTemplate, _poiModInfo.text);
 			FolderManagement.Init(_steamGameFolder, _customGameFolder, _playCustomToggle);
 			GameManagement.Init(_copyGameDialog);
-			DataManagement.Init();
 		}
 	}
 }

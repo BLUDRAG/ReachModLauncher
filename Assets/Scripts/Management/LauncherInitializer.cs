@@ -6,7 +6,8 @@ namespace ReachModLauncher
 	{
 		public void Start()
 		{
-			GoogleDriveManagement.LoadData();
+			GoogleDriveManagement.Init();
+			DataManagement.Init();
 			bool saveLoaded = DataManagement.LoadData();
 			if(!saveLoaded || string.IsNullOrEmpty(DataManagement.GetSaveData().SteamGameFolder)) FolderManagement.FindGameFolder();
 			_ = ModManagement.DownloadModList();

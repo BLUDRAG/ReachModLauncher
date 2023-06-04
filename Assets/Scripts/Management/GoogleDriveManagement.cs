@@ -18,12 +18,14 @@ namespace ReachModLauncher
 		private static DriveService           _service;
 		private static GoogleDriveUploadRules _uploadRules;
 		private static string                 _repoDirectory;
+		private static string                 _superUserVerificationKey;
 		private const  string                 _dataLocation = "Data/GoogleDriveRepoData";
 
-		public static void LoadData()
+		public static void Init()
 		{
 			GoogleDriveRepoData data = Resources.Load<GoogleDriveRepoData>(_dataLocation);
 			_repoDirectory = data.RepoDirectory;
+			_superUserVerificationKey = data.VerificationKey;
 			PrepareService(data.UserData);
 			_ = GetUploadRules(data);
 		}
@@ -123,8 +125,18 @@ namespace ReachModLauncher
 
 		public static bool CanUpload(string author)
 		{
+			if(DataManagement.IsSuperUser())
+			{
+				return DataManagement.GetSuperUserData().BypassPOIUploadLimits;
+			}
+
 			int uploadCount = POIManagement.GetPOIUploadCount();
 			return !(uploadCount >= _uploadRules.DailyUploadLimit || _uploadRules.UserBlacklist.Exists(user => user.User == author));
+		}
+
+		public static bool VerifySuperUser(string key)
+		{
+			return key == _superUserVerificationKey;
 		}
 
 		private static Action<IDownloadProgress> UpdateDownloadProgress(Action<float> progressCallback, long totalBytes)

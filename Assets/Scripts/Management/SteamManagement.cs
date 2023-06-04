@@ -14,6 +14,11 @@ namespace ReachModLauncher
 
 		public static string GetSteamUser()
 		{
+			if(DataManagement.IsSuperUser())
+			{
+				return DataManagement.GetSuperUserData().User;
+			}
+
 			if(!string.IsNullOrEmpty(_user))
 			{
 				return _user;
