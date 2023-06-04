@@ -21,13 +21,14 @@ namespace ReachModLauncher
 		private static string                 _superUserVerificationKey;
 		private const  string                 _dataLocation = "Data/GoogleDriveRepoData";
 
-		public static void Init()
+		public static async Task Init()
 		{
 			GoogleDriveRepoData data = Resources.Load<GoogleDriveRepoData>(_dataLocation);
 			_repoDirectory = data.RepoDirectory;
-			_superUserVerificationKey = data.VerificationKey;
 			PrepareService(data.UserData);
-			_ = GetUploadRules(data);
+			await GetUploadRules(data);
+			_superUserVerificationKey = _uploadRules.VerificationKey;
+			DataManagement.LoadSuperUserData();
 		}
 
 		public static async Task<(bool exists, string id)> FileExists(string folder, string file)

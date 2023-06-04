@@ -15,7 +15,6 @@ namespace ReachModLauncher
 		public static void Init()
 		{
 			LoadData();
-			LoadSuperUserData();
 		}
 
 		public static SaveData GetSaveData()
@@ -55,7 +54,7 @@ namespace ReachModLauncher
 			File.WriteAllText(saveFile, json);
 		}
 
-		private static void LoadSuperUserData()
+		public static void LoadSuperUserData()
 		{
 			string superUserFile = Path.Combine(Directory.GetParent(Application.dataPath).FullName, _superUserFile);
 			if(!File.Exists(superUserFile)) return;
