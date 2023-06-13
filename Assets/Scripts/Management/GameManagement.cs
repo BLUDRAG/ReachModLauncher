@@ -29,15 +29,13 @@ namespace ReachModLauncher
 
 			if(!File.Exists(gameFile))
 			{
-				await CreateCopy(gameFile);
-
-				return;
+				await CreateCopy();
 			}
 
 			Process.Start(gameFile);
 		}
 
-		public static async Task CreateCopy(string gameFile)
+		public static async Task CreateCopy()
 		{
 			SaveData saveData = DataManagement.GetSaveData();
 			string   local    = saveData.SteamGameFolder;
@@ -69,7 +67,6 @@ namespace ReachModLauncher
 			}
 
 			_ = _dialog.Hide();
-			Process.Start(gameFile);
 		}
 	}
 }
