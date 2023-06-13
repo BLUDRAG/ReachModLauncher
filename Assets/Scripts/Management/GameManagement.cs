@@ -32,7 +32,10 @@ namespace ReachModLauncher
 				await CreateCopy();
 			}
 
-			Process.Start(gameFile);
+			Process gameProcess = new Process();
+			gameProcess.StartInfo.FileName = gameFile;
+			gameProcess.StartInfo.WorkingDirectory = gameFolder;
+			gameProcess.Start();
 		}
 
 		public static async Task CreateCopy()
