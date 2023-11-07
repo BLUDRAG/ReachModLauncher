@@ -56,3 +56,9 @@ Terrain blocks like sand and dirt will be flattened when placing blocks next to 
 
 ### Real Infestations (Credits to Blu)
 Increases the number of zombie spawns for infested quests.
+
+### Reach Chat UI (Credits to Mr. Reach)
+A simple mod that adds some color to the chat UI.
+
+### Reach Infinity Trees (Credits to Blu)
+Adds an incredibly durable tree that can be chopped almost forever. Also replantable if you ever break it!
